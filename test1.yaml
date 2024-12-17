@@ -1,0 +1,1602 @@
+openapi: 3.0.0
+info:
+  version: '1.0'
+  title: test1
+  description: description
+servers:
+  - url: 'http://localhost:3000'
+    description: PRD
+  - url: 'http://localhost:1234'
+    description: DEV
+paths:
+  /api/smile/request-new-card:
+    post:
+      summary: 신규발행api
+      description: 신규발행api
+      operationId: post-api-smile-request-new-card
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                applicantCommonEmployeeNumber:
+                  type: string
+                type:
+                  type: string
+                receivingBase:
+                  type: string
+                userCommonEmployeeNumber:
+                  type: string
+                usageStartDate:
+                  type: string
+                  description: yyyy-MM-dd
+                  format: date
+                usageEndDate:
+                  type: string
+                  description: yyyy-MM-dd
+                  format: date
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                  applicationId:
+                    type: string
+                  ggNotGrantedList:
+                    type: array
+                    items:
+                      type: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        errorCode:
+                          type: string
+                        errorMessage:
+                          type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        errorCode:
+                          type: string
+                        errorMessage:
+                          type: string
+      servers:
+        - url: 'http://localhost:3000'
+          description: PRD
+        - url: 'http://localhost:1234'
+          description: DEV
+  /api/auth-service/dc/auth:
+    post:
+      summary: 외부로그인API
+      description: "게스트나비\r\n외부로그인API"
+      operationId: post-api-auth-service-dc-auth
+      parameters:
+        - name: x-api-key
+          in: header
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                clientId:
+                  type: string
+                clientSecret:
+                  type: string
+                clientType:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    description: 성공일경우
+                    properties:
+                      accessToken:
+                        type: string
+                      refreshToken:
+                        type: string
+                      expirationTime:
+                        type: string
+                        description: yyyyMMddHHmmss
+                      error:
+                        type: string
+                      messages:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            code:
+                              type: string
+                            arguments:
+                              type: array
+                              items:
+                                type: string
+                            targetField:
+                              type: string
+                            row:
+                              type: string
+                            col:
+                              type: string
+                            message:
+                              type: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      error:
+                        type: string
+                      messages:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            code:
+                              type: string
+                            arguments:
+                              type: array
+                              items:
+                                type: string
+                            targetField:
+                              type: string
+                            row:
+                              type: string
+                            col:
+                              type: string
+                            message:
+                              type: string
+      servers:
+        - url: 'http://localhost:3000'
+          description: PRD
+        - url: 'http://localhost:1234'
+          description: DEV
+  /api/auth-service/dc/auth/refresh:
+    post:
+      summary: 외부토큰리프레시api
+      operationId: post-api-auth-service-dc-auth-refresh
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refreshToken:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  '':
+                    type: object
+                    properties:
+                      accessToken:
+                        type: string
+                      refreshToken:
+                        type: string
+                      expirationTime:
+                        type: string
+                        description: yyyyMMddHHmmss
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      error:
+                        type: string
+                      message:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            code:
+                              type: string
+                            arguments:
+                              type: array
+                              items:
+                                type: string
+                            targetField:
+                              type: string
+                            row:
+                              type: string
+                            col:
+                              type: string
+                            message:
+                              type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  meesage:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      error:
+                        type: string
+                      messages:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            code:
+                              type: string
+                            arguments:
+                              type: array
+                              items:
+                                type: string
+                            targetField:
+                              type: string
+                            row:
+                              type: string
+                            col:
+                              type: string
+                            message:
+                              type: string
+                            '':
+                              type: string
+      servers:
+        - url: 'http://localhost:3000'
+          description: PRD
+        - url: 'http://localhost:1234'
+          description: DEV
+  /reservation-service/reservations/others:
+    post:
+      summary: DC_API_Create_Reservation
+      operationId: post-reservation-service-reservations-others
+      parameters:
+        - name: Authorization
+          in: header
+          description: access token
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                languageId:
+                  type: integer
+                companyId:
+                  type: integer
+                guestInfo:
+                  $ref: '#/components/schemas/GuestInfo'
+                carGate:
+                  type: boolean
+                carLicensePlateInfo:
+                  $ref: '#/components/schemas/CarLicensePlateInfo'
+                meetingInfo:
+                  $ref: '#/components/schemas/MeetingInfo'
+                googleCalendarInfo:
+                  $ref: '#/components/schemas/GoogleCalendarInfo'
+                isSendMail:
+                  type: boolean
+                templateCreate:
+                  $ref: '#/components/schemas/Template'
+                templateDelete:
+                  $ref: '#/components/schemas/Template'
+                approverId:
+                  type: string
+                approvalComment:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      guestId:
+                        type: string
+                      isUpsertSuccess:
+                        type: string
+                      '':
+                        type: string
+      servers:
+        - url: 'http://localhost:3000'
+          description: PRD
+        - url: 'http://localhost:1234'
+          description: DEV
+  /reservation-service/reservations/others/meeting-room:
+    post:
+      summary: DC_API_Create_Reservation_Meeting_Room
+      operationId: post-reservation-service-reservations-others-meeting-room
+      parameters:
+        - name: Authorization
+          in: header
+          description: access token
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                languageId:
+                  type: string
+                companyId:
+                  type: string
+                guestInfo:
+                  $ref: '#/components/schemas/GuestInfo'
+                carLicensePlateInfo:
+                  $ref: '#/components/schemas/CarLicensePlateInfo'
+                carGate:
+                  type: boolean
+                meetingInfo:
+                  $ref: '#/components/schemas/MeetingInfoWithRoomInfo'
+                googleCalendarInfo:
+                  $ref: '#/components/schemas/GoogleCalendarInfo'
+                isSendMail:
+                  type: boolean
+                templateCreate:
+                  $ref: '#/components/schemas/Template'
+                templateUpdate:
+                  $ref: '#/components/schemas/Template'
+                templateDelete:
+                  $ref: '#/components/schemas/Template'
+                approverId:
+                  type: string
+                apprvalComment:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      guestId:
+                        type: integer
+                      isUpsertSuccess:
+                        type: boolean
+                      isReflectCalendarSuccess:
+                        type: string
+                      isSendMailSuccess:
+                        type: string
+      servers:
+        - url: 'http://localhost:3000'
+          description: PRD
+        - url: 'http://localhost:1234'
+          description: DEV
+  '/reservation-service/reservations/others/{id}':
+    post:
+      summary: DC_API_Update_Reservation
+      operationId: post-reservation-service-reservations-others-id
+      parameters:
+        - name: Authorization
+          in: header
+          description: access token
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                languageId:
+                  type: string
+                guestInfo:
+                  $ref: '#/components/schemas/GuestInfo'
+                carlicensePlateInfo:
+                  $ref: '#/components/schemas/CarLicensePlateInfo'
+                carGate:
+                  type: boolean
+                meetingInfo:
+                  $ref: '#/components/schemas/MeetingInfo'
+                googleCalendarInfo:
+                  $ref: '#/components/schemas/GoogleCalendarInfo'
+                isSendMail:
+                  type: boolean
+                templateCreate:
+                  $ref: '#/components/schemas/Template'
+                templateUpdate:
+                  $ref: '#/components/schemas/Template'
+                templateDelete:
+                  $ref: '#/components/schemas/Template'
+                approverId:
+                  type: string
+                approvalComment:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      guestId:
+                        type: string
+                      isUpsertSuccess:
+                        type: boolean
+                      isReflectCalendarSuccess:
+                        type: string
+                      isSendMailSuccess:
+                        type: string
+      servers:
+        - url: 'http://localhost:3000'
+          description: PRD
+        - url: 'http://localhost:1234'
+          description: DEV
+  '/reservation-service/reservations/others/meeting-room/{id}':
+    post:
+      summary: DC_API_Update_Reservation_Meeting_Room
+      operationId: post-reservation-service-reservations-others-meeting-room-id
+      parameters:
+        - name: Authorization
+          in: header
+          description: access token
+          schema:
+            type: string
+        - name: buildingId
+          in: query
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                languageId:
+                  type: string
+                guestInfo:
+                  $ref: '#/components/schemas/GuestInfo'
+                carLicensePlateInfo:
+                  $ref: '#/components/schemas/CarLicensePlateInfo'
+                carGate:
+                  type: boolean
+                meetingInfo:
+                  $ref: '#/components/schemas/MeetingInfoWithRoomInfo'
+                googleCalendarInfo:
+                  $ref: '#/components/schemas/GoogleCalendarInfo'
+                isSendMail:
+                  type: boolean
+                templateCreate:
+                  $ref: '#/components/schemas/Template'
+                templateUpdate:
+                  $ref: '#/components/schemas/Template'
+                templateDelete:
+                  $ref: '#/components/schemas/Template'
+                approverId:
+                  type: string
+                approvalComment:
+                  type: string
+      responses: {}
+      servers:
+        - url: 'http://localhost:3000'
+          description: PRD
+        - url: 'http://localhost:1234'
+          description: DEV
+  '/reservation-service/buildings/{id}/security-classes':
+    get:
+      summary: DC_API_Get_Security_Class
+      operationId: get-reservation-service-buildings-id-security-classes
+      parameters:
+        - name: Authorization
+          in: header
+          description: access token
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        nameJp:
+                          type: string
+                        nameEn:
+                          type: string
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  timestamp:
+                    type: string
+                  status:
+                    type: string
+                  error:
+                    type: string
+                  path:
+                    type: string
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  timestamp:
+                    type: string
+                  path:
+                    type: string
+                  status:
+                    type: string
+                  error:
+                    type: string
+                  requestId:
+                    type: string
+      servers:
+        - url: 'http://localhost:3000'
+          description: PRD
+        - url: 'http://localhost:1234'
+          description: DEV
+  /reservation-service/admin/reservations/others:
+    get:
+      summary: DC_Admin_API_Get_Reservations
+      operationId: get-reservation-service-admin-reservations-others
+      parameters:
+        - name: Authorization
+          in: header
+          description: access token
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: default=1
+          schema:
+            type: integer
+        - name: size
+          in: query
+          description: default=20
+          schema:
+            type: integer
+        - name: sortBy
+          in: query
+          schema:
+            type: string
+        - name: sortDirection
+          in: query
+          description: 'default=desc, asc or desc'
+          schema:
+            type: string
+        - name: groupNumber
+          in: query
+          schema:
+            type: integer
+        - name: meetingDescription
+          in: query
+          schema:
+            type: string
+        - name: name
+          in: query
+          schema:
+            type: string
+        - name: companyName
+          in: query
+          schema:
+            type: string
+        - name: entryStatus
+          in: query
+          schema:
+            type: integer
+        - name: visitCode
+          in: query
+          schema:
+            type: string
+        - name: exceedingVisit
+          in: query
+          schema:
+            type: boolean
+        - name: mailAddress
+          in: query
+          schema:
+            type: string
+        - name: visitDate
+          in: query
+          schema:
+            type: string
+        - name: condition
+          in: query
+          schema:
+            type: integer
+        - name: startMeteingTim
+          in: query
+          schema:
+            type: string
+        - name: visitBuildingId
+          in: query
+          schema:
+            type: integer
+        - name: endMeetingTime
+          in: query
+          schema:
+            type: string
+        - name: visitFloorId
+          in: query
+          schema:
+            type: string
+        - name: visitLocation
+          in: query
+          schema:
+            type: string
+        - name: numberOfGroup
+          in: query
+          schema:
+            type: integer
+        - name: createdBy
+          in: query
+          schema:
+            type: string
+        - name: phoneNumber
+          in: query
+          schema:
+            type: string
+        - name: isRepeat
+          in: query
+          schema:
+            type: boolean
+        - name: ownerNam
+          in: query
+          schema:
+            type: string
+        - name: licensePlateRegionId
+          in: query
+          schema:
+            type: integer
+        - name: typeNumber
+          in: query
+          schema:
+            type: string
+        - name: licensePlateCharacterId
+          in: query
+          schema:
+            type: integer
+        - name: firstCarNumber
+          in: query
+          schema:
+            type: string
+        - name: lastCarNumber
+          in: query
+          schema:
+            type: string
+        - name: carGate
+          in: query
+          schema:
+            type: integer
+        - name: securityClassId
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                      page:
+                        type: integer
+                      size:
+                        type: integer
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            geustId:
+                              type: integer
+                            companionId:
+                              type: integer
+                            groupNo:
+                              type: integer
+                            scheduledVisitTime:
+                              type: string
+                            enVisitTime:
+                              type: string
+                            companyName:
+                              type: string
+                            name:
+                              type: string
+                            email:
+                              type: string
+                            isRepresentative:
+                              type: boolean
+                            companionNumber:
+                              type: integer
+                            entryStatus:
+                              type: integer
+                            status:
+                              type: boolean
+                            meetingStartTime:
+                              type: string
+                            meetingInfoId:
+                              type: integer
+                            representativeName:
+                              type: string
+                            isRepeat:
+                              type: boolean
+                            type:
+                              type: integer
+                            canDelete:
+                              type: boolean
+                            resourceBookingId:
+                              type: integer
+      servers:
+        - url: 'http://localhost:3000'
+          description: PRD
+        - url: 'http://localhost:1234'
+          description: DEV
+    post:
+      summary: DC_Admin_API_Create_Reservation
+      operationId: post-reservation-service-admin-reservations-others
+      parameters:
+        - name: Authorization
+          in: header
+          description: access token
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                adminGuestInfo:
+                  $ref: '#/components/schemas/AdminGuestInfo'
+                adminMeetingInfo:
+                  $ref: '#/components/schemas/AdminMeetingInfo'
+                carGate:
+                  type: string
+                carLicensePlateInfo:
+                  $ref: '#/components/schemas/CarLicensePlateInfo'
+                participants:
+                  type: object
+                  properties:
+                    accountId:
+                      type: string
+                    isReflectMail:
+                      type: boolean
+                    isEditable:
+                      type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      isUpsertSuccess:
+                        type: boolean
+      servers:
+        - url: 'http://localhost:3000'
+          description: PRD
+        - url: 'http://localhost:1234'
+          description: DEV
+  '/reservation-service/admin/reservations/others/{id}':
+    put:
+      summary: DC_Api_Update_Reservation_Admin
+      operationId: put-reservation-service-admin-reservations-others-id
+      parameters:
+        - name: Authorization
+          in: header
+          description: access token
+          schema:
+            type: string
+        - name: buildingId
+          in: query
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                adminGuestInfo:
+                  $ref: '#/components/schemas/AdminGuestInfo'
+                adminMeetingInfo:
+                  $ref: '#/components/schemas/AdminMeetingInfo'
+                carGate:
+                  type: boolean
+                carLicensePlateInfo:
+                  $ref: '#/components/schemas/CarLicensePlateInfo'
+                participants:
+                  type: object
+                  properties:
+                    accountId:
+                      type: integer
+                    isReflectMail:
+                      type: boolean
+                    isEditable:
+                      type: boolean
+                isSendMail:
+                  type: boolean
+                isUPdateRepeat:
+                  type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      isUpsertSuccess:
+                        type: boolean
+                      isSendMailSuccess:
+                        type: boolean
+      servers:
+        - url: 'http://localhost:3000'
+          description: PRD
+        - url: 'http://localhost:1234'
+          description: DEV
+  '/reservation-service/admin/reservations/others/meeting-room/{id}':
+    put:
+      summary: DC_API_Update_Reservation_Meeting_Room_Admin
+      operationId: put-reservation-service-admin-reservations-others-meeting-room-id
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+        - name: buildingId
+          in: query
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                adminGuestInfo:
+                  $ref: '#/components/schemas/AdminGuestInfo'
+                adminMeetingInfo:
+                  $ref: '#/components/schemas/AdminMeetingInfo'
+                carGate:
+                  type: boolean
+                carLicensePlateInfo:
+                  $ref: '#/components/schemas/CarLicensePlateInfo'
+                participants:
+                  type: object
+                  properties:
+                    accountId:
+                      type: string
+                    isReflectMail:
+                      type: boolean
+                    isEditable:
+                      type: boolean
+                isSendMail:
+                  type: boolean
+                isUpdateRepeat:
+                  type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      isUpsertSuccess:
+                        type: boolean
+                      iisSenMiilkSuccess:
+                        type: boolean
+      servers:
+        - url: 'http://localhost:3000'
+          description: PRD
+        - url: 'http://localhost:1234'
+          description: DEV
+  '/reservation-service/admin/reservations/{id}':
+    get:
+      summary: DC_Admin_API_Get_Detail_Reservation
+      operationId: get-reservation-service-admin-reservations-id
+      parameters:
+        - name: Authorization
+          in: header
+          description: access token
+          schema:
+            type: string
+        - name: id
+          in: query
+          schema:
+            type: integer
+        - name: guestId
+          in: query
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      adminMeetingInfoRes:
+                        type: object
+                        properties:
+                          meetingInfoId:
+                            type: integer
+                          meetingRoomName:
+                            type: string
+                          meetingRoomId:
+                            type: integer
+                          resourceBookingId:
+                            type: integer
+                          phoneNumber:
+                            type: string
+                          commentForGuest:
+                            type: string
+                          visitDate:
+                            type: string
+                          meetingStartTime:
+                            type: string
+                          meetingEndTime:
+                            type: string
+                          visitStartTime:
+                            type: string
+                          visitEndTime:
+                            type: string
+                          visitBuildingId:
+                            type: integer
+                          visitFloorId:
+                            type: integer
+                          visitLocationJp:
+                            type: string
+                          visitLocationEn:
+                            type: string
+                          meetingLocation:
+                            type: string
+                          isRepeat:
+                            type: boolean
+                          repeatTyp:
+                            type: string
+                          startRecurrence:
+                            type: string
+                          endRecurrene:
+                            type: string
+                          repeatDayInWeeks:
+                            type: string
+                          adminNote:
+                            type: string
+                          reservedType:
+                            type: string
+                          temporaryDeleteTime:
+                            type: integer
+                          languageId:
+                            type: integer
+                          booking:
+                            type: integer
+                          isRoomOnlyForAdmin:
+                            type: string
+                          companyId:
+                            type: string
+                          companyName:
+                            type: string
+                          bookingMeetingRoomDTO:
+                            type: string
+                          isValidPermisionWithMeetingRoom:
+                            type: string
+                          securityClassId:
+                            type: integer
+                          carGate:
+                            type: integer
+                          carLicensePlateInfo:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                              licensePlateRegionId:
+                                type: integer
+                              licensePlateChracterId:
+                                type: integer
+                              typeNumber:
+                                type: string
+                              carNumber:
+                                type: string
+                      adminGuestInfoRes:
+                        type: object
+                        properties:
+                          guestId:
+                            type: integer
+                          companyName:
+                            type: string
+                          department:
+                            type: string
+                          jobTitle:
+                            type: string
+                          name:
+                            type: string
+                          mailAddress:
+                            type: string
+                          companions:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                id:
+                                  type: integer
+                                companyName:
+                                  type: string
+                                isWifiAccount:
+                                  type: boolean
+                                department:
+                                  type: string
+                                isSendMailRepresentative:
+                                  type: boolean
+                                jobTitle:
+                                  type: string
+                                name:
+                                  type: string
+                                mailAddress:
+                                  type: string
+                                entryStatus:
+                                  type: integer
+                                isSendMailSuccess:
+                                  type: boolean
+                                otp:
+                                  type: string
+                          visitEmployee:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                id:
+                                  type: integer
+                                department:
+                                  type: string
+                                jobTitle:
+                                  type: string
+                                phoneNumber:
+                                  type: string
+                                name:
+                                  type: string
+                                email:
+                                  type: string
+                                companyName:
+                                  type: string
+                                employeeEmail:
+                                  type: string
+                                isEditable:
+                                  type: boolean
+                          entryStatus:
+                            type: integer
+                      googleCalendarInfoRes:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          isReflect:
+                            type: boolean
+                          meetingSubject:
+                            type: string
+                          meetingContent:
+                            type: string
+                          isUseMailGroup:
+                            type: boolean
+                          partcipants:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                              googleCalendarInfoId:
+                                type: integer
+                              accountId:
+                                type: string
+                              department:
+                                type: string
+                              jobTitle:
+                                type: string
+                              phoneNumber:
+                                type: string
+                              name:
+                                type: string
+                              email:
+                                type: string
+                              isReflectMail:
+                                type: boolean
+                              isEditable:
+                                type: boolean
+                              isReflectCalendar:
+                                type: boolean
+                              companyName:
+                                type: string
+                          isDefaultSubjct:
+                            type: boolean
+                      entryHistories:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            'no':
+                              type: integer
+                            type:
+                              type: integer
+                            status:
+                              type: string
+                            operatingTime:
+                              type: string
+                      guestId:
+                        type: integer
+                      companionId:
+                        type: integer
+                      groupNo:
+                        type: integer
+                      canDelete:
+                        type: boolean
+      servers:
+        - url: 'http://localhost:3000'
+          description: PRD
+        - url: 'http://localhost:1234'
+          description: DEV
+components:
+  schemas:
+    GuestInfo:
+      type: object
+      title: GuestInfo
+      properties:
+        companyName:
+          type: string
+        department:
+          type: string
+        jobTitle:
+          type: string
+        name:
+          type: string
+        mailAddress:
+          type: string
+        phoneNumber:
+          type: string
+        commentForGuest:
+          type: string
+        companions:
+          type: array
+          items:
+            type: object
+            properties:
+              companyName:
+                type: string
+              department:
+                type: string
+              jobTitle:
+                type: string
+              name:
+                type: string
+              mailAddress:
+                type: string
+              isSedMailRepresentative:
+                type: boolean
+    CarLicensePlateInfo:
+      type: object
+      title: CarLicensePlateInfo
+      properties:
+        licensePlateRegionId:
+          type: integer
+        typeNumber:
+          type: string
+        licensePlateCharacterId:
+          type: integer
+        carNumber:
+          type: string
+    MeetingInfo:
+      type: object
+      title: MeetingInfoWithRoomInfo
+      properties:
+        meetingStartTime:
+          type: string
+        meetingEndTime:
+          type: string
+        visitStartTime:
+          type: string
+        visitEndTime:
+          type: string
+        visitBuildingId:
+          type: integer
+        securityClassId:
+          type: integer
+        employeeConfirmEmail:
+          type: string
+        employeeConfirmId:
+          type: string
+    GoogleCalendarInfo:
+      type: object
+      title: GoogleCalendarInfo
+      properties:
+        eventId:
+          type: string
+        isUseDefaultSubject:
+          type: boolean
+        isReflect:
+          type: boolean
+        meetingSubject:
+          type: string
+        meetingContent:
+          type: string
+        isUseMailGroup:
+          type: boolean
+        participants:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              accountId:
+                type: integer
+              email:
+                type: string
+              isReflectMail:
+                type: boolean
+              isEditable:
+                type: boolean
+              isReflectCalendar:
+                type: boolean
+    Template:
+      type: object
+      title: Template
+      properties:
+        mailOfGuest:
+          type: object
+          properties:
+            companyName:
+              type: string
+            name:
+              type: string
+            mailAddress:
+              type: string
+            phoneNumber:
+              type: string
+            isSendMail:
+              type: boolean
+            id:
+              type: integer
+            isGuest:
+              type: boolean
+            companions:
+              type: array
+              items:
+                type: object
+                properties:
+                  companyName:
+                    type: string
+                  department:
+                    type: string
+                  jobTitle:
+                    type: string
+                  name:
+                    type: string
+                  mailAddress:
+                    type: string
+                  isSendMailRepresentative:
+                    type: string
+            mailInfo:
+              type: object
+              properties:
+                body:
+                  type: string
+                from:
+                  type: string
+                cc:
+                  type: string
+        lstCompanionRequest:
+          type: object
+          properties:
+            isSendMailRepresentative:
+              type: boolean
+            companyName:
+              type: string
+            department:
+              type: string
+            jobTitle:
+              type: string
+            name:
+              type: string
+            mailAddress:
+              type: string
+            isNewCompanion:
+              type: boolean
+            id:
+              type: integer
+            isGuest:
+              type: boolean
+            mailInfo:
+              type: object
+              properties:
+                body:
+                  type: string
+                from:
+                  type: string
+                cc:
+                  type: string
+            isSendMail:
+              type: boolean
+    MeetingInfoWithRoomInfo:
+      type: object
+      title: MeetingInfoWithRoomInfo
+      properties:
+        meetingStartTime:
+          type: string
+        meetingEndTime:
+          type: string
+        visitStartTime:
+          type: string
+        visitEndTime:
+          type: string
+        visitBuildingId:
+          type: string
+        securityClassId:
+          type: string
+        employeeConfirmEmail:
+          type: string
+        meetingRoomId:
+          type: string
+        temporaryDeleteTime:
+          type: string
+        bookingCompanyId:
+          type: string
+        employeeConfirmId:
+          type: string
+    AdminGuestInfo:
+      type: object
+      title: AdminGuestInfo
+      properties:
+        companyName:
+          type: string
+        department:
+          type: string
+        jobTitle:
+          type: string
+        name:
+          type: string
+        mailAddress:
+          type: string
+        companions:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              companyName:
+                type: string
+              department:
+                type: string
+              jobTitle:
+                type: string
+              name:
+                type: string
+              mailAddress:
+                type: string
+        visitEmployeeId:
+          type: integer
+        companyId:
+          type: integer
+    AdminMeetingInfo:
+      type: object
+      title: AdminMeetingInfo
+      properties:
+        reservedType:
+          type: integer
+        meetingRoomId:
+          type: string
+        meetingRoomName:
+          type: string
+        phoneNumber:
+          type: string
+        commentForGuest:
+          type: string
+        visitDate:
+          type: string
+        meetingStartTime:
+          type: string
+        meetingEndTime:
+          type: string
+        visitStartTime:
+          type: string
+        visitEndTime:
+          type: string
+        visitBuildingId:
+          type: integer
+        visitFloorId:
+          type: integer
+        visitLocation:
+          type: string
+        meetingLocation:
+          type: string
+        isRepeat:
+          type: boolean
+        repeatType:
+          type: integer
+        startRecurrence:
+          type: string
+        endRecurrence:
+          type: string
+        repeatDayInWeeks:
+          type: array
+          items:
+            type: string
+        adminNote:
+          type: string
